@@ -6,11 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Student } from '@/types/Student';
 import { Music } from 'lucide-react';
 
 interface StudentFormProps {
-  onAddStudent: (student: Student) => void;
+  onAddStudent: (studentData: any) => Promise<any>;
 }
 
 const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
@@ -18,7 +17,7 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
     name: '',
     email: '',
     instrument: '',
-    skillLevel: ''
+    skill_level: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -33,7 +32,7 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.instrument || !formData.skillLevel) {
+    if (!formData.name || !formData.email || !formData.instrument || !formData.skill_level) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields.",
@@ -45,34 +44,18 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
     setIsSubmitting(true);
 
     try {
-      const newStudent: Student = {
-        id: Date.now().toString(),
-        name: formData.name,
-        email: formData.email,
-        instrument: formData.instrument,
-        skillLevel: formData.skillLevel as 'Beginner' | 'Intermediate' | 'Advanced',
-        registeredAt: new Date()
-      };
-
-      onAddStudent(newStudent);
+      const result = await onAddStudent(formData);
       
-      setFormData({
-        name: '',
-        email: '',
-        instrument: '',
-        skillLevel: ''
-      });
-
-      toast({
-        title: "Registration Successful!",
-        description: `${formData.name} has been registered for ${formData.instrument}.`,
-      });
+      if (result) {
+        setFormData({
+          name: '',
+          email: '',
+          instrument: '',
+          skill_level: ''
+        });
+      }
     } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "There was an error registering the student.",
-        variant: "destructive",
-      });
+      console.error('Error submitting form:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -133,7 +116,7 @@ const StudentForm: React.FC<StudentFormProps> = ({ onAddStudent }) => {
 
           <div className="space-y-2">
             <Label htmlFor="skillLevel">Skill Level</Label>
-            <Select value={formData.skillLevel} onValueChange={(value) => handleInputChange('skillLevel', value)}>
+            <Select value={formData.skill_level} onValueChange={(value) => handleInputChange('skill_level', value)}>
               <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-blue-500">
                 <SelectValue placeholder="Select your skill level" />
               </SelectTrigger>

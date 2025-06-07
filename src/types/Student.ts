@@ -4,6 +4,6 @@ export interface Student {
   name: string;
   email: string;
   instrument: string;
-  skillLevel: 'Beginner' | 'Intermediate' | 'Advanced';
-  registeredAt: Date;
+  skill_level: 'Beginner' | 'Intermediate' | 'Advanced';
+  registered_at: string;
 }

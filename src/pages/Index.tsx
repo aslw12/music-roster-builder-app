@@ -1,16 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import StudentForm from '@/components/StudentForm';
 import StudentList from '@/components/StudentList';
-import { Student } from '@/types/Student';
 import { Separator } from '@/components/ui/separator';
+import { useStudents } from '@/hooks/useStudents';
 
 const Index = () => {
-  const [students, setStudents] = useState<Student[]>([]);
-
-  const handleAddStudent = (newStudent: Student) => {
-    setStudents(prev => [newStudent, ...prev]);
-  };
+  const { students, loading, addStudent, updateStudent, deleteStudent } = useStudents();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -27,7 +23,7 @@ const Index = () => {
 
         {/* Registration Form */}
         <div className="mb-12">
-          <StudentForm onAddStudent={handleAddStudent} />
+          <StudentForm onAddStudent={addStudent} />
         </div>
 
         {/* Separator */}
@@ -39,12 +35,17 @@ const Index = () => {
 
         {/* Student List */}
         <div className="mb-8">
-          <StudentList students={students} />
+          <StudentList 
+            students={students} 
+            loading={loading}
+            onUpdateStudent={updateStudent}
+            onDeleteStudent={deleteStudent}
+          />
         </div>
 
         {/* Footer */}
         <div className="text-center text-sm text-muted-foreground mt-12">
-          <p>Ready to connect to Supabase? Click the green Supabase button in the top right to enable real-time data storage!</p>
+          <p>All student data is now stored securely in Supabase with real-time updates!</p>
         </div>
       </div>
     </div>
