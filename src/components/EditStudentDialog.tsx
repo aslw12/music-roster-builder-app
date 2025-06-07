@@ -24,7 +24,7 @@ const EditStudentDialog: React.FC<EditStudentDialogProps> = ({
     name: student?.name || '',
     email: student?.email || '',
     instrument: student?.instrument || '',
-    skill_level: student?.skill_level || ''
+    skill_level: student?.skill_level || 'Beginner' as 'Beginner' | 'Intermediate' | 'Advanced'
   });
   const [saving, setSaving] = useState(false);
 
@@ -55,6 +55,13 @@ const EditStudentDialog: React.FC<EditStudentDialogProps> = ({
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleSkillLevelChange = (value: 'Beginner' | 'Intermediate' | 'Advanced') => {
+    setFormData(prev => ({
+      ...prev,
+      skill_level: value
     }));
   };
 
@@ -97,7 +104,7 @@ const EditStudentDialog: React.FC<EditStudentDialogProps> = ({
 
           <div className="space-y-2">
             <Label htmlFor="edit-skill-level">Skill Level</Label>
-            <Select value={formData.skill_level} onValueChange={(value) => handleInputChange('skill_level', value)}>
+            <Select value={formData.skill_level} onValueChange={handleSkillLevelChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

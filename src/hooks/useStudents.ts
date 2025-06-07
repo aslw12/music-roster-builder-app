@@ -26,7 +26,8 @@ export const useStudents = () => {
         return;
       }
 
-      setStudents(data || []);
+      // Type assertion to ensure skill_level matches our Student interface
+      setStudents((data || []) as Student[]);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -52,12 +53,14 @@ export const useStudents = () => {
         return null;
       }
 
-      setStudents(prev => [data, ...prev]);
+      // Type assertion for the returned data
+      const newStudent = data as Student;
+      setStudents(prev => [newStudent, ...prev]);
       toast({
         title: "Success!",
         description: `${studentData.name} has been registered.`,
       });
-      return data;
+      return newStudent;
     } catch (error) {
       console.error('Error:', error);
       return null;
@@ -83,14 +86,16 @@ export const useStudents = () => {
         return null;
       }
 
+      // Type assertion for the returned data
+      const updatedStudent = data as Student;
       setStudents(prev => prev.map(student => 
-        student.id === id ? data : student
+        student.id === id ? updatedStudent : student
       ));
       toast({
         title: "Success!",
         description: "Student updated successfully.",
       });
-      return data;
+      return updatedStudent;
     } catch (error) {
       console.error('Error:', error);
       return null;
