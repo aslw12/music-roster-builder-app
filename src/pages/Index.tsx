@@ -1,11 +1,51 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import StudentForm from '@/components/StudentForm';
+import StudentList from '@/components/StudentList';
+import { Student } from '@/types/Student';
+import { Separator } from '@/components/ui/separator';
 
 const Index = () => {
+  const [students, setStudents] = useState<Student[]>([]);
+
+  const handleAddStudent = (newStudent: Student) => {
+    setStudents(prev => [newStudent, ...prev]);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Music School Registration
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Welcome to our music program! Register today and embark on your musical journey with our expert instructors.
+          </p>
+        </div>
+
+        {/* Registration Form */}
+        <div className="mb-12">
+          <StudentForm onAddStudent={handleAddStudent} />
+        </div>
+
+        {/* Separator */}
+        <div className="flex items-center justify-center mb-12">
+          <Separator className="flex-1 max-w-xs" />
+          <span className="px-4 text-muted-foreground font-medium">Our Students</span>
+          <Separator className="flex-1 max-w-xs" />
+        </div>
+
+        {/* Student List */}
+        <div className="mb-8">
+          <StudentList students={students} />
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-sm text-muted-foreground mt-12">
+          <p>Ready to connect to Supabase? Click the green Supabase button in the top right to enable real-time data storage!</p>
+        </div>
       </div>
     </div>
   );
